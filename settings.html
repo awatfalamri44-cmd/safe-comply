@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings - Compliance Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #cbd3df 0%, #7d90ac 100%);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .dashboard-wrapper {
+      display: flex;
+      width: 100%;
+      max-width: 1400px;
+      height: 90vh;
+      background: rgba(255, 255, 255, 0.945);
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 200px;
+      background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+      padding: 30px 0;
+      display: flex;
+      flex-direction: column;
+      color: white;
+    }
+
+    .profile-section {
+      text-align: center;
+      padding: 0 20px 30px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .profile-img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: #ecf0f1cc;
+      margin: 0 auto 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+
+    .profile-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .profile-email {
+      font-size: 11px;
+      opacity: 0.7;
+    }
+
+    .menu-item {
+      padding: 15px 25px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 14px;
+      color: white;
+      text-decoration: none;
+      margin: 5px 0;
+    }
+
+    .menu-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .menu-item.active {
+      background: rgba(255, 255, 255, 0.15);
+      border-left: 4px solid #3498db;
+    }
+
+    .bottom-menu,
+    .logout-section {
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .logout-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255, 255, 255, 0.8);
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .main-content {
+      flex: 1;
+      background: #6d8cad7e;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .top-header {
+      background: white;
+      padding: 20px 35px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .welcome-text {
+      font-size: 20px;
+      font-weight: 600;
+      color: #16538f;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .search-box {
+      padding: 8px 15px;
+      border: 1px solid #dee2e6;
+      border-radius: 20px;
+      width: 250px;
+      font-size: 13px;
+    }
+
+    .icon-btn {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: #f8f9fa;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .content-area {
+      flex: 1;
+      padding: 25px 35px;
+      overflow-y: auto;
+    }
+
+    .section-title {
+      font-size: 20px;
+      color: #071928;
+      margin-bottom: 25px;
+      font-weight: 600;
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .settings-card {
+      background: #ffffffc9;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .settings-card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #051338;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #f1f3f5;
+    }
+
+    .setting-item:last-child {
+      border-bottom: none;
+    }
+
+    .setting-info {
+      flex: 1;
+    }
+
+    .setting-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+
+    .setting-description {
+      font-size: 12px;
+      color: #6c757d;
+    }
+
+    .setting-control {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 50px;
+      height: 26px;
+      background: #ccc;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .toggle-switch.active {
+      background: #3498db;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: left 0.3s;
+    }
+
+    .toggle-switch.active .toggle-slider {
+      left: 27px;
+    }
+
+    .setting-input {
+      padding: 8px 12px;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      font-size: 13px;
+      width: 250px;
+    }
+
+    .setting-select {
+      padding: 8px 12px;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      font-size: 13px;
+      width: 250px;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: #3498db;
+      color: white;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-primary:hover {
+      background: #2980b9;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: #95a5a6;
+      color: white;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-secondary:hover {
+      background: #7f8c8d;
+    }
+
+    .btn-danger {
+      background: #e74c3c;
+      color: white;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-danger:hover {
+      background: #c0392b;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .content-area::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .content-area::-webkit-scrollbar-track {
+      background: #f1f3f5;
+    }
+
+    .content-area::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+
+    /* Dark Mode Styles */
+    body.dark-mode {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    }
+
+    body.dark-mode .dashboard-wrapper {
+      background: rgba(30, 30, 46, 0.945);
+    }
+
+    body.dark-mode .main-content {
+      background: #1e1e2e;
+    }
+
+    body.dark-mode .top-header {
+      background: #2a2a3e;
+      border-bottom-color: #3a3a4e;
+    }
+
+    body.dark-mode .welcome-text {
+      color: #a0c4ff;
+    }
+
+    body.dark-mode .search-box {
+      background: #3a3a4e;
+      border-color: #4a4a5e;
+      color: white;
+    }
+
+    body.dark-mode .icon-btn {
+      background: #3a3a4e;
+    }
+
+    body.dark-mode .section-title {
+      color: #ffffff;
+    }
+
+    body.dark-mode .settings-card {
+      background: rgba(42, 42, 62, 0.8);
+    }
+
+    body.dark-mode .settings-card-title {
+      color: #ffffff;
+      border-bottom-color: #4a4a5e;
+    }
+
+    body.dark-mode .setting-label {
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .setting-description {
+      color: #a0a0a0;
+    }
+
+    body.dark-mode .setting-item {
+      border-bottom-color: #3a3a4e;
+    }
+
+    body.dark-mode .setting-input,
+    body.dark-mode .setting-select {
+      background: #3a3a4e;
+      border-color: #4a4a5e;
+      color: white;
+    }
+  </style>
+  <link rel="stylesheet" href="modal.css" />
+</head>
+
+<body>
+  <div class="dashboard-wrapper">
+    <div class="sidebar">
+      <div class="profile-section">
+        <div class="profile-img" id="sidebarProfileImg" style="cursor:pointer; overflow:hidden; position:relative;"
+          title="Click to change picture">
+          <img id="profileImage" src=""
+            style="width:100%; height:100%; object-fit:cover; display:none; border-radius:50%;" />
+          <span id="profileEmoji">👤</span>
+        </div>
+        <input type="file" id="profilePictureInput" accept="image/*" style="display:none;" />
+        <div class="profile-name">Auditor</div>
+        <div class="profile-email">auditor@company.com</div>
+      </div>
+
+      <a href="dashboard.html" class="menu-item">
+        <span>📊</span>
+        <span>Dashboard</span>
+      </a>
+      <a href="password-policies.html" class="menu-item">
+        <span>🔐</span>
+        <span>Password Policies</span>
+      </a>
+      <a href="backup-policies.html" class="menu-item">
+        <span>💾</span>
+        <span>Backup Policies</span>
+      </a>
+      <a href="reports.html" class="menu-item">
+        <span>📄</span>
+        <span>Reports</span>
+      </a>
+      <a href="recommendations.html" class="menu-item">
+        <span>💡</span>
+        <span>Recommendations</span>
+      </a>
+      <a href="settings.html" class="menu-item active">
+        <span>⚙️</span>
+        <span>Settings</span>
+      </a>
+
+      <div class="bottom-menu">
+        <a href="#" class="menu-item logout-btn">
+          <span>🚪</span>
+          <span>Logout</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="top-header">
+        <div class="welcome-text">Settings</div>
+        <div class="header-actions">
+          <input type="text" class="search-box" placeholder="Search..." />
+          <div style="position: relative;">
+            <button class="icon-btn" id="notif-btn">
+              🔔
+              <span class="notification-badge" style="display:none;">0</span>
+            </button>
+            <div class="notification-dropdown" id="notif-dropdown">
+              <div class="notification-header">
+                <span>Notifications</span>
+                <span id="mark-read-btn" style="font-size: 11px; color: #3498db; cursor: pointer;">Mark all as
+                  read</span>
+              </div>
+              <div class="notification-list">
+                <!-- Dynamic Content Loads Here -->
+              </div>
+            </div>
+          </div>
+          <button class="icon-btn">🌙</button>
+        </div>
+      </div>
+
+      <div class="content-area">
+        <div class="section-title">General Settings</div>
+
+        <div class="settings-grid">
+          <!-- Account Settings -->
+          <div class="settings-card">
+            <div class="settings-card-title">Account Settings</div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-label">Username</div>
+                <div class="setting-description">Change your username</div>
+              </div>
+              <div class="setting-control">
+                <input type="text" class="setting-input" id="usernameInput" value="Auditor" readonly />
+              </div>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-label">Email Address</div>
+                <div class="setting-description">
+                  Update your email address
+                </div>
+              </div>
+              <div class="setting-control">
+                <input type="email" class="setting-input" id="emailInput" value="auditor@company.com" />
+              </div>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-label">Password</div>
+                <div class="setting-description">Change your password</div>
+              </div>
+              <div class="setting-control">
+                <button class="btn-secondary" id="changePasswordBtn">Change Password</button>
+              </div>
+            </div>
+
+            <div class="button-group">
+              <button class="btn-primary" id="saveChangesBtn">Save Changes</button>
+              <button class="btn-secondary" id="cancelBtn">Cancel</button>
+            </div>
+          </div>
+
+          <!-- Notification Settings -->
+          <div class="settings-card">
+            <div class="settings-card-title">Notification Settings</div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-label">Email Notifications</div>
+                <div class="setting-description">
+                  Receive email notifications for alerts
+                </div>
+              </div>
+              <div class="setting-control">
+                <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                  <div class="toggle-slider"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-label">Push Notifications</div>
+                <div class="setting-description">
+                  Receive push notifications
+                </div>
+              </div>
+              <div class="setting-control">
+                <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                  <div class="toggle-slider"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-label">Weekly Reports</div>
+                <div class="setting-description">
+                  Receive weekly compliance reports
+                </div>
+              </div>
+              <div class="setting-control">
+                <div class="toggle-switch" onclick="toggleSwitch(this)">
+                  <div class="toggle-slider"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-label">Alert Priority</div>
+                <div class="setting-description">
+                  Minimum priority level for notifications
+                </div>
+              </div>
+              <div class="setting-control">
+                <select class="setting-select">
+                  <option>All Alerts</option>
+                  <option selected>Medium and High</option>
+                  <option>High Only</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- System Settings -->
+          <div class="settings-card">
+            <div class="settings-card-title">System Settings</div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-label">Language</div>
+                <div class="setting-description">
+                  Choose your preferred language
+                </div>
+              </div>
+              <div class="setting-control">
+                <select class="setting-select">
+                  <option selected>English</option>
+                  <option>Arabic</option>
+                  <option>French</option>
+                  <option>Spanish</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-label">Time Zone</div>
+                <div class="setting-description">Set your time zone</div>
+              </div>
+              <div class="setting-control">
+                <select class="setting-select">
+                  <option>UTC</option>
+                  <option selected>GMT+3 (Riyadh)</option>
+                  <option>GMT+0 (London)</option>
+                  <option>EST (New York)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-label">Dark Mode</div>
+                <div class="setting-description">Enable dark mode theme</div>
+              </div>
+              <div class="setting-control">
+                <div class="toggle-switch" onclick="toggleSwitch(this)">
+                  <div class="toggle-slider"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-label">Auto Backup</div>
+                <div class="setting-description">
+                  Automatically backup data daily
+                </div>
+              </div>
+              <div class="setting-control">
+                <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                  <div class="toggle-slider"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Security Settings -->
+          <div class="settings-card">
+            <div class="settings-card-title">Security Settings</div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-label">Two-Factor Authentication</div>
+                <div class="setting-description">
+                  Add an extra layer of security
+                </div>
+              </div>
+              <div class="setting-control">
+                <div class="toggle-switch" onclick="toggleSwitch(this)">
+                  <div class="toggle-slider"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-label">Session Timeout</div>
+                <div class="setting-description">
+                  Auto logout after inactivity
+                </div>
+              </div>
+              <div class="setting-control">
+                <select class="setting-select">
+                  <option>15 minutes</option>
+                  <option selected>30 minutes</option>
+                  <option>1 hour</option>
+                  <option>Never</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-label">Login History</div>
+                <div class="setting-description">
+                  View your recent login activity
+                </div>
+              </div>
+              <div class="setting-control">
+                <button class="btn-secondary" id="viewHistoryBtn">View History</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- User Management (Auditor Only) -->
+          <div class="settings-card" id="userManagementSection" style="display: none;">
+            <div class="settings-card-title">User Management (Auditor)</div>
+            <div id="userListContainer">
+              <div style="text-align: center; color: #666;">Loading users...</div>
+            </div>
+          </div>
+
+          <!-- Danger Zone -->
+          <div class="settings-card" style="border: 2px solid #e74c3c">
+            <div class="settings-card-title" style="color: #e74c3c">
+              Danger Zone
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-label">Export Data</div>
+                <div class="setting-description">Download all your data</div>
+              </div>
+              <div class="setting-control">
+                <button class="btn-secondary" id="exportBtn">Export</button>
+              </div>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-label">Delete Account</div>
+                <div class="setting-description">
+                  Permanently delete your account and all data
+                </div>
+              </div>
+              <div class="setting-control">
+                <button class="btn-danger" id="deleteAccountBtn">Delete Account</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Change Password Modal -->
+  <div id="passwordModal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+    <div style="background:white; padding:30px; border-radius:12px; width:400px; max-width:90%;">
+      <h3 style="margin:0 0 20px; color:#051338;">Change Password</h3>
+      <div style="margin-bottom:15px;">
+        <label style="display:block; margin-bottom:5px; font-weight:600; color:#2c3e50;">Current Password</label>
+        <input type="password" id="currentPassword"
+          style="width:100%; padding:10px; border:1px solid #dee2e6; border-radius:6px; box-sizing:border-box;" />
+      </div>
+      <div style="margin-bottom:15px;">
+        <label style="display:block; margin-bottom:5px; font-weight:600; color:#2c3e50;">New Password</label>
+        <input type="password" id="newPassword"
+          style="width:100%; padding:10px; border:1px solid #dee2e6; border-radius:6px; box-sizing:border-box;" />
+      </div>
+      <div style="margin-bottom:20px;">
+        <label style="display:block; margin-bottom:5px; font-weight:600; color:#2c3e50;">Confirm New Password</label>
+        <input type="password" id="confirmPassword"
+          style="width:100%; padding:10px; border:1px solid #dee2e6; border-radius:6px; box-sizing:border-box;" />
+      </div>
+      <div id="passwordRequirements"
+        style="margin-bottom:15px; padding:10px; background:#f8f9fa; border-radius:6px; font-size:12px; color:#666;">
+        Password must be at least 12 characters with uppercase, lowercase, number, and special character.
+      </div>
+      <div style="display:flex; gap:10px; justify-content:flex-end;">
+        <button onclick="closePasswordModal()" class="btn-secondary">Cancel</button>
+        <button onclick="submitPasswordChange()" class="btn-primary">Change Password</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login History Modal -->
+  <div id="historyModal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+    <div
+      style="background:white; padding:30px; border-radius:12px; width:600px; max-width:90%; max-height:80vh; overflow-y:auto;">
+      <h3 style="margin:0 0 20px; color:#051338;">Login History</h3>
+      <div id="historyContent" style="min-height:100px;">
+        <div style="text-align:center; color:#666;">Loading...</div>
+      </div>
+      <div style="display:flex; justify-content:flex-end; margin-top:20px;">
+        <button onclick="closeHistoryModal()" class="btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Account Modal -->
+  <div id="deleteModal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+    <div
+      style="background:white; padding:30px; border-radius:12px; width:400px; max-width:90%; border:2px solid #e74c3c;">
+      <h3 style="margin:0 0 20px; color:#e74c3c;">⚠️ Delete Account</h3>
+      <p style="color:#666; margin-bottom:20px;">This action is permanent and cannot be undone. All your data and
+        reports will be deleted.</p>
+      <div style="margin-bottom:20px;">
+        <label style="display:block; margin-bottom:5px; font-weight:600; color:#2c3e50;">Enter your password to
+          confirm</label>
+        <input type="password" id="deletePassword"
+          style="width:100%; padding:10px; border:1px solid #dee2e6; border-radius:6px; box-sizing:border-box;" />
+      </div>
+      <div style="display:flex; gap:10px; justify-content:flex-end;">
+        <button onclick="closeDeleteModal()" class="btn-secondary">Cancel</button>
+        <button onclick="submitDeleteAccount()" class="btn-danger">Delete My Account</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // API Base URL - use current origin to work with any port
+    const API_BASE = window.location.origin;
+
+    // Load User Details
+    const username = localStorage.getItem("username");
+    const userRole = localStorage.getItem("userRole");
+    let originalEmail = '';
+
+    // Load profile data on page load
+    async function loadProfile() {
+      try {
+        const token = localStorage.getItem('authToken');
+        if (!token) return;
+
+        const resp = await fetch(`${API_BASE}/auth/profile`, {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+
+        if (resp.ok) {
+          const data = await resp.json();
+          document.getElementById('usernameInput').value = data.username;
+          document.getElementById('emailInput').value = data.email || '';
+          originalEmail = data.email || '';
+
+          // Update sidebar
+          document.querySelector('.profile-name').textContent = data.username;
+          document.querySelector('.profile-email').textContent = data.email || data.username + '@company.com';
+
+          // Load profile picture
+          if (data.profile_picture) {
+            document.getElementById('profileImage').src = data.profile_picture;
+            document.getElementById('profileImage').style.display = 'block';
+            document.getElementById('profileEmoji').style.display = 'none';
+            localStorage.setItem('userProfilePicture', data.profile_picture);
+          }
+        }
+      } catch (e) {
+        console.error('Failed to load profile:', e);
+      }
+    }
+
+    if (username) {
+      document.querySelector(".profile-name").textContent = username;
+      document.querySelector(".profile-email").textContent = username + "@company.com";
+      document.getElementById('usernameInput').value = username;
+
+      // Load cached profile picture
+      const cachedPicture = localStorage.getItem('userProfilePicture');
+      if (cachedPicture) {
+        document.getElementById('profileImage').src = cachedPicture;
+        document.getElementById('profileImage').style.display = 'block';
+        document.getElementById('profileEmoji').style.display = 'none';
+      }
+
+      // Auditor Check for User Management
+      if (userRole === 'auditor') {
+        document.getElementById('userManagementSection').style.display = 'block';
+        loadUsers();
+      }
+
+      loadProfile();
+    }
+
+    // ============ PROFILE PICTURE UPLOAD ============
+    document.getElementById('sidebarProfileImg').addEventListener('click', function () {
+      document.getElementById('profilePictureInput').click();
+    });
+
+    document.getElementById('profilePictureInput').addEventListener('change', async function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        showWarning('Please select an image file', 'Invalid File Type');
+        return;
+      }
+
+      // Validate file size (max 500KB)
+      if (file.size > 500 * 1024) {
+        showWarning('Image too large. Maximum size is 500KB', 'File Too Large');
+        return;
+      }
+
+      // Read and convert to base64
+      const reader = new FileReader();
+      reader.onload = async function (event) {
+        const base64Data = event.target.result;
+
+        // Preview immediately
+        document.getElementById('profileImage').src = base64Data;
+        document.getElementById('profileImage').style.display = 'block';
+        document.getElementById('profileEmoji').style.display = 'none';
+
+        // Upload to server
+        try {
+          const token = localStorage.getItem('authToken');
+          const resp = await fetch(`${API_BASE}/auth/profile/picture`, {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer ' + token,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ picture: base64Data })
+          });
+
+          const data = await resp.json();
+          if (resp.ok) {
+            localStorage.setItem('userProfilePicture', base64Data);
+            showSuccess('Profile picture updated successfully!', 'Update Saved');
+          } else {
+            showError('Error: ' + (data.error || 'Failed to update picture'), 'Update Failed');
+          }
+        } catch (err) {
+          showError('Error: ' + err.message, 'Connection Error');
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // ============ SAVE CHANGES ============
+    // ============ SAVE CHANGES ============
+    document.getElementById('saveChangesBtn').addEventListener('click', async function () {
+      const email = document.getElementById('emailInput').value.trim();
+
+      if (!email) {
+        showWarning('Please enter an email address', 'Missing Information');
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem('authToken');
+        const resp = await fetch(`${API_BASE}/auth/profile`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email: email })
+        });
+
+        const data = await resp.json();
+        if (resp.ok) {
+          showSuccess('Profile updated successfully!', 'Changes Saved');
+          originalEmail = email;
+          // Store in localStorage so other pages can read it
+          localStorage.setItem('userEmail', email);
+          document.querySelector('.profile-email').textContent = email;
+        } else {
+          showError('Error: ' + (data.error || 'Failed to update profile'), 'Update Failed');
+        }
+      } catch (e) {
+        showError('Error: ' + e.message, 'Connection Error');
+      }
+    });
+
+    // ============ CANCEL ============
+    document.getElementById('cancelBtn').addEventListener('click', function () {
+      // Reset email to original value
+      document.getElementById('emailInput').value = originalEmail;
+    });
+
+    // ============ CHANGE PASSWORD ============
+    document.getElementById('changePasswordBtn').addEventListener('click', function () {
+      document.getElementById('passwordModal').style.display = 'flex';
+      document.getElementById('currentPassword').value = '';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('confirmPassword').value = '';
+    });
+
+    function closePasswordModal() {
+      document.getElementById('passwordModal').style.display = 'none';
+    }
+
+    async function submitPasswordChange() {
+      const current = document.getElementById('currentPassword').value;
+      const newPwd = document.getElementById('newPassword').value;
+      const confirm = document.getElementById('confirmPassword').value;
+
+      if (!current || !newPwd || !confirm) {
+        showWarning('Please fill in all password fields', 'Missing Information');
+        return;
+      }
+
+      if (newPwd !== confirm) {
+        showWarning('New passwords do not match', 'Mismatch');
+        return;
+      }
+
+      if (newPwd.length < 12) {
+        showWarning('Password must be at least 12 characters', 'Password too short');
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem('authToken');
+        const resp = await fetch(`${API_BASE}/auth/change-password`, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            current_password: current,
+            new_password: newPwd
+          })
+        });
+
+        const data = await resp.json();
+        if (resp.ok) {
+          closePasswordModal();
+          showSuccess('Password changed successfully!', 'Success');
+        } else {
+          showError('Error: ' + (data.error || 'Failed to change password'), 'Update Failed');
+        }
+      } catch (e) {
+        showError('Error: ' + e.message, 'Connection Error');
+      }
+    }
+
+    // ============ VIEW HISTORY ============
+    document.getElementById('viewHistoryBtn').addEventListener('click', async function () {
+      document.getElementById('historyModal').style.display = 'flex';
+      document.getElementById('historyContent').innerHTML = '<div style="text-align:center; color:#666;">Loading...</div>';
+
+      try {
+        const token = localStorage.getItem('authToken');
+        const resp = await fetch(`${API_BASE}/auth/history`, {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+
+        if (resp.ok) {
+          const data = await resp.json();
+          renderHistory(data.history);
+        } else {
+          document.getElementById('historyContent').innerHTML = '<div style="color:#e74c3c;">Failed to load history</div>';
+        }
+      } catch (e) {
+        document.getElementById('historyContent').innerHTML = '<div style="color:#e74c3c;">Error: ' + e.message + '</div>';
+      }
+    });
+
+    function renderHistory(history) {
+      const container = document.getElementById('historyContent');
+      if (!history || history.length === 0) {
+        container.innerHTML = '<div style="text-align:center; color:#666; padding:20px;">No login history found</div>';
+        return;
+      }
+
+      let html = '<table style="width:100%; border-collapse:collapse;">';
+      html += '<thead><tr style="background:#f8f9fa;"><th style="padding:10px; text-align:left; border-bottom:2px solid #dee2e6;">Date & Time</th><th style="padding:10px; text-align:left; border-bottom:2px solid #dee2e6;">IP Address</th><th style="padding:10px; text-align:left; border-bottom:2px solid #dee2e6;">Status</th></tr></thead><tbody>';
+
+      history.forEach(h => {
+        const statusColor = h.status === 'success' ? '#27ae60' : '#e74c3c';
+        const statusText = h.status === 'success' ? '✓ Success' : '✗ Failed';
+        const date = new Date(h.login_at).toLocaleString();
+        html += `<tr><td style="padding:10px; border-bottom:1px solid #eee;">${date}</td><td style="padding:10px; border-bottom:1px solid #eee;">${h.ip_address}</td><td style="padding:10px; border-bottom:1px solid #eee; color:${statusColor};">${statusText}</td></tr>`;
+      });
+
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+
+    function closeHistoryModal() {
+      document.getElementById('historyModal').style.display = 'none';
+    }
+
+    // ============ EXPORT ============
+    // ============ EXPORT ============
+    document.getElementById('exportBtn').addEventListener('click', async function () {
+      try {
+        const token = localStorage.getItem('authToken');
+        const resp = await fetch(`${API_BASE}/auth/export`, {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+
+        if (resp.ok) {
+          const blob = await resp.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'safecomply_export.json';
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+          showSuccess('Data exported successfully!', 'Export Complete');
+        } else {
+          const data = await resp.json();
+          showError('Error: ' + (data.error || 'Failed to export data'), 'Export Failed');
+        }
+      } catch (e) {
+        showError('Error: ' + e.message, 'Connection Error');
+      }
+    });
+
+    // ============ DELETE ACCOUNT ============
+    document.getElementById('deleteAccountBtn').addEventListener('click', function () {
+      // Check if primary auditor
+      if (username === 'auditor') {
+        showWarning('Cannot delete the primary auditor account', 'Action Not Allowed');
+        return;
+      }
+      document.getElementById('deleteModal').style.display = 'flex';
+      document.getElementById('deletePassword').value = '';
+    });
+
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    async function submitDeleteAccount() {
+      const password = document.getElementById('deletePassword').value;
+
+      if (!password) {
+        showWarning('Please enter your password to confirm', 'Missing Password');
+        return;
+      }
+
+      if (!await showDangerConfirm('Are you absolutely sure? This will permanently delete your account and all data.', 'Delete Account?')) {
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem('authToken');
+        const resp = await fetch(`${API_BASE}/auth/delete-account`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ password: password })
+        });
+
+        const data = await resp.json();
+        if (resp.ok) {
+          await showSuccess('Account deleted successfully. You will be redirected to the login page.', 'Account Deleted');
+          localStorage.clear();
+          window.location.href = 'signin.html';
+        } else {
+          showError('Error: ' + (data.error || 'Failed to delete account'), 'Deletion Failed');
+        }
+      } catch (e) {
+        showError('Error: ' + e.message, 'Connection Error');
+      }
+    }
+
+    // ============ AUDITOR: LOAD USERS ============
+    async function loadUsers() {
+      try {
+        const token = localStorage.getItem('authToken');
+        const resp = await fetch(`${API_BASE}/admin/users`, {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+
+        if (resp.ok) {
+          const data = await resp.json();
+          renderUsers(data.users);
+        } else {
+          console.error("Failed to load users");
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function renderUsers(users) {
+      const container = document.getElementById('userListContainer');
+      if (!users || users.length === 0) {
+        container.innerHTML = '<div style="padding:15px; text-align:center;">No users found.</div>';
+        return;
+      }
+
+      let html = '';
+      users.forEach(u => {
+        html += `
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-label">${u.username} <span style="font-size:11px; background:#eee; padding:2px 6px; border-radius:4px; margin-left:5px;">${u.role}</span></div>
+                <div class="setting-description">ID: ${u.id}</div>
+              </div>
+              <div class="setting-control">
+                ${u.username !== 'auditor' ?
+              `<button class="btn-danger" style="padding: 5px 15px; font-size: 12px;" onclick="deleteUser('${u.username}')">Delete</button>`
+              : '<span style="color:#999; font-size:12px;">Primary Auditor</span>'}
+              </div>
+            </div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    async function deleteUser(username) {
+      if (!await showDangerConfirm(`Are you sure you want to delete user '${username}'? This cannot be undone.`, 'Delete User?')) return;
+
+      try {
+        const token = localStorage.getItem('authToken');
+        const resp = await fetch(`${API_BASE}/admin/users/${username}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+
+        const data = await resp.json();
+        if (resp.ok) {
+          await showSuccess(data.message, 'User Deleted');
+          loadUsers(); // Reload list
+        } else {
+          showError('Error: ' + (data.error || 'Failed to delete'), 'Deletion Failed');
+        }
+      } catch (e) {
+        showError('Error: ' + e.message, 'Connection Error');
+      }
+    }
+
+    // ============ TOGGLE SWITCH ============
+    function toggleSwitch(element) {
+      element.classList.toggle("active");
+
+      const settingItem = element.closest(".setting-item");
+      const label = settingItem.querySelector(".setting-label");
+
+      if (label && label.textContent === "Dark Mode") {
+        document.body.classList.toggle("dark-mode");
+        const isDarkMode = document.body.classList.contains("dark-mode");
+        localStorage.setItem("darkMode", isDarkMode);
+      }
+    }
+
+    // ============ DARK MODE INIT ============
+    window.addEventListener("DOMContentLoaded", function () {
+      const isDarkMode = localStorage.getItem("darkMode") === "true";
+      if (isDarkMode) {
+        document.body.classList.add("dark-mode");
+        const settingItems = document.querySelectorAll(".setting-item");
+        settingItems.forEach((item) => {
+          const label = item.querySelector(".setting-label");
+          if (label && label.textContent === "Dark Mode") {
+            const toggle = item.querySelector(".toggle-switch");
+            if (toggle) {
+              toggle.classList.add("active");
+            }
+          }
+        });
+      }
+    });
+
+    // ============ LOGOUT ============
+    document
+      .querySelector(".logout-btn")
+      .addEventListener("click", async function (e) {
+        e.preventDefault();
+        if (await showConfirm("Are you sure you want to logout?", "Confirm Logout")) {
+          localStorage.clear();
+          window.location.href = "signin.html";
+        }
+      });
+
+    // ============ CLOSE MODALS ON OUTSIDE CLICK ============
+    document.getElementById('passwordModal').addEventListener('click', function (e) {
+      if (e.target === this) closePasswordModal();
+    });
+    document.getElementById('historyModal').addEventListener('click', function (e) {
+      if (e.target === this) closeHistoryModal();
+    });
+    document.getElementById('deleteModal').addEventListener('click', function (e) {
+      if (e.target === this) closeDeleteModal();
+    });
+  </script>
+  <script src="modal.js"></script>
+  <script src="notifications.js"></script>
+  <style>
+    /* Notification Styles */
+    .header-actions {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      position: relative;
+    }
+
+    .notification-dropdown {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      width: 320px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      overflow: hidden;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      border: 1px solid #edf2f7;
+    }
+
+    .notification-dropdown.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .notification-header {
+      padding: 15px 20px;
+      border-bottom: 1px solid #f1f3f5;
+      font-weight: 600;
+      color: #2c3e50;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .notification-item {
+      padding: 15px 20px;
+      border-bottom: 1px solid #f8f9fa;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+
+    .notification-item:hover {
+      background: #f8f9fa;
+    }
+
+    .notif-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .notif-desc {
+      font-size: 12px;
+      color: #6c757d;
+      line-height: 1.4;
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #e74c3c;
+      color: white;
+      font-size: 10px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid white;
+    }
+  </style>
+</body>
+
+</html>
