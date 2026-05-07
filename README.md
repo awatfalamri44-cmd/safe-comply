@@ -21,15 +21,15 @@ SafeComply is a web-based system designed to enhance organizational security by 
 
 ## Screenshots
 
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](dashboard.png)
 
-![Compliance](screenshots/compliance.png)
+![Compliance](compliance.png)
 
-![Login](screenshots/login.png)
+![Login](login.png)
 
-![Policy](screenshots/policy-management.png)
+![Policy](policy-management.png)
 
-![Risk](screenshots/risk-analysis.png)
+![Risk](risk-analysis.png)
 
 ### Compliance Page
 ![Compliance](screenshots/compliance.png)
