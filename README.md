@@ -1,2 +1,2 @@
 # safe-comply
-A data-driven electronic system designed to assess compliance with cybersecurity standards through structured data processing and automated assessment logic
+An integrated cybersecurity compliance system that aims to enhance data protection and raise the level of security within organizations through password policy management, compliance monitoring, user tracking, and continuous security risk analysis.
