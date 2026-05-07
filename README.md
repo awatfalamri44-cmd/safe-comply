@@ -33,7 +33,5 @@ SafeComply is a web-based system designed to enhance organizational security by 
 
 
 
-## ⚙️ How to Run the Project
-
-1. Clone the repository
-```bash
+## 🔗 Project Repository
+https://github.com/awatfalamri44-cmd/safe-comply
